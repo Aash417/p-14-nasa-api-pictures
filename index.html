@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NASA API Pictures</title>
+		<link rel="stylesheet" href="style.css" />
+		<link
+			rel="icon"
+			type="image/png"
+			href="https://s2.googleusercontent.com/s2/favicons?domain=www.nasa.gov"
+		/>
+		<!-- ZTM Favicon -->
+		<!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+	</head>
+	<body>
+		<!-- Loader  -->
+		<div class="loader hidden">
+			<img src="rocket.svg" alt="rocket loading anime" />
+		</div>
+		<!-- Container -->
+		<div class="container">
+			<div class="navigation-container">
+				<span class="background">
+					<!-- Result -->
+				</span>
+				<span class="navigation-items" id="resultsNav">
+					<h3 class="clickable">Favorites</h3>
+					<h3>&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</h3>
+					<h3 class="clickable">Load More</h3>
+				</span>
+				<!-- Favroites nav  -->
+				<span class="navigation-items hidden" id="favoritesNav">
+					<h3 class="clickable">Load more images</h3>
+				</span>
+			</div>
+			<!-- Images  -->
+			<div class="images-container">
+				<div class="card">
+					<a href="" title="View full image" target="_blank">
+						<img
+							src="https://apod.nasa.gov/apod/image/2309/LRGBHa23_n7331r.jpg"
+							class="card-img-top"
+							alt="nasa pic of the day"
+						/>
+					</a>
+					<div class="card-body">
+						<h5 class="card-title">Title of image</h5>
+						<p class="clickable">Add to favorites</p>
+						<p class="card-text">
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
+							dolore itaque maiores vel eveniet, asperiores voluptatibus eos
+							dignissimos deserunt ab autem omnis minima nam distinctio et!
+							Optio sed et repudiandae!
+						</p>
+
+						<small class="text-muted">
+							<strong>15-09-2023</strong>
+							<span>Copyright info</span>
+						</small>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Save confirmation -->
+		<div class="save-confirmed hidden">
+			<h1>Added</h1>
+		</div>
+
+		<!-- Script -->
+		<script src="script.js"></script>
+	</body>
+</html>
