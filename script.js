@@ -4,6 +4,26 @@ const imagesContainer = document.querySelector(".images-container");
 const saveConfirmed = document.querySelector(".save-confirmed");
 const loader = document.querySelector(".loader");
 
+// Nasa api
+const count = 10;
+const apiKey = "DEMO_KEY";
+const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${count}`;
+
+let resultsArr = [];
+let favorites = {};
+
+function showContent(page) {
+	window.scrollTo({ top: 0, behavior: "instant" });
+	if (page === "result") {
+		resultsNav.classList.remove("hidden");
+		favoritesNav.classList.add("hidden");
+	} else {
+		resultsNav.classList.add("hidden");
+		favoritesNav.classList.remove("hidden");
+	}
+	loader.classList.add("hidden");
+}
+
 function createMarkup(page) {
 	const currentArr = page === "result" ? resultsArr : Object.values(favorites);
 	currentArr.forEach((e) => {
@@ -32,7 +52,7 @@ function createMarkup(page) {
 		const saveText = document.createElement("p");
 		saveText.classList.add("clickable");
 
-		if (page === "results") {
+		if (page === "result") {
 			saveText.textContent = "Add to favorites";
 			saveText.setAttribute("onclick", `saveFavorite('${e.url}')`);
 		} else {
@@ -58,7 +78,6 @@ function createMarkup(page) {
 		link.appendChild(image);
 		card.append(link, cardBody);
 
-		// console.log(card);
 		imagesContainer.appendChild(card);
 	});
 }
@@ -70,10 +89,11 @@ function updateDOM(page) {
 
 	imagesContainer.textContent = "";
 	createMarkup(page);
+	showContent(page);
 }
+
 // Add result to favorites
 function saveFavorite(item) {
-	// console.log(item);
 	resultsArr.forEach((e) => {
 		if (e.url.includes(item) && !favorites[item]) {
 			favorites[item] = e;
@@ -88,7 +108,6 @@ function saveFavorite(item) {
 			localStorage.setItem("nasaFav", JSON.stringify(favorites));
 		}
 	});
-	// console.log(favorites);
 }
 
 function removeFavorite(item) {
@@ -97,22 +116,16 @@ function removeFavorite(item) {
 	localStorage.setItem("nasaFav", JSON.stringify(favorites));
 	updateDOM("favorites");
 }
-// Nasa api
-const count = 10;
-const apiKey = "DEMO_KEY";
-const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&count=${count}`;
-
-let resultsArr = [];
-let favorites = {};
 
 // get images from nasa api
 const getNasaPictures = async () => {
+	// Show the loader
+	loader.classList.remove("hidden");
 	try {
 		const res = await fetch(apiUrl);
 		resultsArr = await res.json();
 
-		// console.log(resultsArr);
-		updateDOM("favorites");
+		updateDOM("result");
 	} catch (error) {
 		console.log(error);
 	}
