@@ -5,10 +5,7 @@ const saveConfirmed = document.querySelector(".save-confirmed");
 const loader = document.querySelector(".loader");
 
 function createMarkup(page) {
-	console.log(page);
-
 	const currentArr = page === "result" ? resultsArr : Object.values(favorites);
-	console.log(currentArr);
 	currentArr.forEach((e) => {
 		// card container
 		const card = document.createElement("div");
@@ -34,8 +31,14 @@ function createMarkup(page) {
 		// Save-Text
 		const saveText = document.createElement("p");
 		saveText.classList.add("clickable");
-		saveText.textContent = "Add to favorites";
-		saveText.setAttribute("onclick", `saveFavorite('${e.url}')`);
+
+		if (page === "results") {
+			saveText.textContent = "Add to favorites";
+			saveText.setAttribute("onclick", `saveFavorite('${e.url}')`);
+		} else {
+			saveText.textContent = "Remove favorites";
+			saveText.setAttribute("onclick", `removeFavorite('${e.url}')`);
+		}
 		// Card Text
 		const cardText = document.createElement("p");
 		cardText.textContent = e.explanation;
@@ -64,11 +67,36 @@ function updateDOM(page) {
 	// Get favorites from ls
 	if (localStorage.getItem("nasaFav"))
 		favorites = JSON.parse(localStorage.getItem("nasaFav"));
-	console.log(favorites);
 
+	imagesContainer.textContent = "";
 	createMarkup(page);
 }
+// Add result to favorites
+function saveFavorite(item) {
+	// console.log(item);
+	resultsArr.forEach((e) => {
+		if (e.url.includes(item) && !favorites[item]) {
+			favorites[item] = e;
 
+			// Show save confirmation for 2 seconds
+			saveConfirmed.hidden = false;
+			setTimeout(() => {
+				saveConfirmed.hidden = true;
+			}, 2000);
+
+			// Save favorites in local storage
+			localStorage.setItem("nasaFav", JSON.stringify(favorites));
+		}
+	});
+	// console.log(favorites);
+}
+
+function removeFavorite(item) {
+	if (favorites[item]) delete favorites[item];
+	// remove favorites in local storage
+	localStorage.setItem("nasaFav", JSON.stringify(favorites));
+	updateDOM("favorites");
+}
 // Nasa api
 const count = 10;
 const apiKey = "DEMO_KEY";
@@ -89,26 +117,6 @@ const getNasaPictures = async () => {
 		console.log(error);
 	}
 };
-
-// Add result to favorites
-function saveFavorite(item) {
-	// console.log(item);
-	resultsArr.forEach((e) => {
-		if (e.url.includes(item) && !favorites[item]) {
-			favorites[item] = e;
-
-			// Show save confirmation for 2 seconds
-			saveConfirmed.hidden = false;
-			setTimeout(() => {
-				saveConfirmed.hidden = true;
-			}, 2000);
-
-			// Save favorites in local storage
-			localStorage.setItem("nasaFav", JSON.stringify(favorites));
-		}
-	});
-	// console.log(favorites);
-}
 
 // on load
 getNasaPictures();
