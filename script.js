@@ -4,8 +4,12 @@ const imagesContainer = document.querySelector(".images-container");
 const saveConfirmed = document.querySelector(".save-confirmed");
 const loader = document.querySelector(".loader");
 
-function updateDOM() {
-	resultsArr.forEach((e) => {
+function createMarkup(page) {
+	console.log(page);
+
+	const currentArr = page === "result" ? resultsArr : Object.values(favorites);
+	console.log(currentArr);
+	currentArr.forEach((e) => {
 		// card container
 		const card = document.createElement("div");
 		card.classList.add("card");
@@ -56,6 +60,15 @@ function updateDOM() {
 	});
 }
 
+function updateDOM(page) {
+	// Get favorites from ls
+	if (localStorage.getItem("nasaFav"))
+		favorites = JSON.parse(localStorage.getItem("nasaFav"));
+	console.log(favorites);
+
+	createMarkup(page);
+}
+
 // Nasa api
 const count = 10;
 const apiKey = "DEMO_KEY";
@@ -70,8 +83,8 @@ const getNasaPictures = async () => {
 		const res = await fetch(apiUrl);
 		resultsArr = await res.json();
 
-		console.log(resultsArr);
-		updateDOM();
+		// console.log(resultsArr);
+		updateDOM("favorites");
 	} catch (error) {
 		console.log(error);
 	}
@@ -94,7 +107,7 @@ function saveFavorite(item) {
 			localStorage.setItem("nasaFav", JSON.stringify(favorites));
 		}
 	});
-	console.log(favorites);
+	// console.log(favorites);
 }
 
 // on load
